@@ -32,7 +32,7 @@ connection2.autocommit = True
 
 
 #####################################
-# FUNCIONES PARA CONNECTION2 LOGIN db
+# FUNCIONES PARA LOGIN db
 #####################################
 
 def registrar_usuario(username, password, account):
@@ -43,19 +43,8 @@ def registrar_usuario(username, password, account):
         account = False     #Aacomoda la variable account a un true o fals epara verificar que tipo de cuenta es
 
     cursor= connection2.cursor()
-    query_data1 = f"INSERT INTO usuarios(nombre, admin) VALUES('{username}', {account})"
+    query_data1 = f"INSERT INTO usuarios(nombre, contrasenia, admin, fecha_registro) VALUES('{username}', '{password}', {account}, '{datetime.now()}')"
     cursor.execute(query_data1)
-
-    cursor= connection2.cursor()
-    query_data = f"SELECT id_usuario FROM usuarios WHERE nombre = '{username}'"
-    cursor.execute(query_data)
-    data_id = cursor.fetchall()
-
-
-    query_data2 = f"INSERT INTO contrasenas(id_usuario, contrasena) VALUES({data_id[0][0]}, '{password}')"
-    cursor.execute(query_data2)
-
-
     cursor.close()
 
 def hay_admin():
@@ -72,7 +61,7 @@ def hay_admin():
 
 def actualizar_contrasena(new_password, recover_id):
     cursor= connection2.cursor()
-    query_data = f"UPDATE contrasenas SET contrasena = '{new_password}' WHERE id_usuario = {recover_id}"
+    query_data = f"UPDATE usuarios SET contrasenia = '{new_password}' WHERE id_usuario = {recover_id}"
     cursor.execute(query_data)
     cursor.close()
 
@@ -85,12 +74,13 @@ def existencia_de_id(recover_id):
     data = cursor.fetchall()
     cursor.close()
 
+    
+
     if data != []:
         return True
     else:
-        return False    
-
-    
+        return False   
+     
 
 def existe_usuario(username):
     cursor= connection2.cursor()
@@ -106,11 +96,13 @@ def existe_usuario(username):
 
 
 def verificar_contrasenia(password, username, account):
+    
     cursor= connection2.cursor()
-    query_data2 = f"SELECT usuarios.id_usuario, contrasenas.contrasena, usuarios.admin FROM usuarios JOIN contrasenas ON usuarios.id_usuario = contrasenas.id_usuario WHERE usuarios.nombre = '{username}'"
+    query_data2 = f"SELECT contrasenia, admin FROM usuarios WHERE nombre = '{username}'"
     cursor.execute(query_data2)
     data = cursor.fetchall()
     cursor.close()
+
 
     ###########ORDENAR PARA CORREGIR QUE VERIFIQUE SI ES USUARIO O ADMIN  ES DECIR, QUE VEA SI ES TRUE O FALSE EN LA TABLA APRA NO TRAER TODOS LOS NOBRES
 
@@ -120,23 +112,11 @@ def verificar_contrasenia(password, username, account):
         account = False     #Aacomoda la variable account a un true o false para verificar que tipo de cuenta es
 
     if data != []:
-        if data[0][1] != password or data[0][2] != account: ## verifica password igual y si el tipo es igual al seleccionado
+        if data[0][0] != password or data[0][1] != account: ## verifica password igual y si el tipo es igual al seleccionado
             return True # devuelve true si alguno es distinto para tirar el mensaje de error
     else:
         return False
 
-def obtener_id_usuario(usuario):
-    cursor= connection2.cursor()
-    query_data2 = f"SELECT id_usuario FROM usuarios WHERE nombre = '{usuario}'"
-    cursor.execute(query_data2)
-    data = cursor.fetchall()
-    cursor.close()
-
-    if data != []:
-        return data[0][0]
-    else:
-        return -1
-    
 
 
 def resource_path(relative_path):

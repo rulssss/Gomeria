@@ -43,8 +43,8 @@ class Login:
         position_right = int(screen_width / 2 - window_width / 2)
         self.master.geometry(f'{window_width}x{window_height}+{position_right}+{position_top}')
         # Cargar la imagen del icono
-        icon_path = resource_path("resources/r.ico")  # Ruta relativa a la imagen del icono
-        self.master.iconbitmap(icon_path)
+        #icon_path = resource_path("resources/r.ico")  # Ruta relativa a la imagen del icono
+        #self.master.iconbitmap(icon_path)
 
     def request_validation_code(self, validation_code):
         for widget in self.master.winfo_children():
