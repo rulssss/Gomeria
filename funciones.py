@@ -118,6 +118,18 @@ def verificar_contrasenia(password, username, account):
         return False
 
 
+def obtener_id_usuario(usuario):
+    cursor= connection2.cursor()
+    query_data2 = f"SELECT id_usuario FROM usuarios WHERE nombre = '{usuario}'"
+    cursor.execute(query_data2)
+    data = cursor.fetchall()
+    cursor.close()
+
+    if data != []:
+        return data[0][0]
+    else:
+        return -1
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """

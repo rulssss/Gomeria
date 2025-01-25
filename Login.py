@@ -5,6 +5,7 @@ from funciones import *
 from validacion import check_activation, validate_code
 import uuid
 from validacion import * 
+from gomeria import *
 ## VENTANA DE LOGINS 
 
 
@@ -43,8 +44,8 @@ class Login:
         position_right = int(screen_width / 2 - window_width / 2)
         self.master.geometry(f'{window_width}x{window_height}+{position_right}+{position_top}')
         # Cargar la imagen del icono
-        #icon_path = resource_path("resources/r.ico")  # Ruta relativa a la imagen del icono
-        #self.master.iconbitmap(icon_path)
+        icon_path = resource_path("resources/goma.ico")  # Ruta relativa a la imagen del icono
+        self.master.iconbitmap(icon_path)
 
     def request_validation_code(self, validation_code):
         for widget in self.master.winfo_children():
@@ -325,14 +326,15 @@ class Login:
         else:
             messagebox.showinfo("Acceso", f"Accediendo como {account} con usuario {username}")
             self.master.destroy()
-            #minimarket_root = tk.Tk()
+            gomeria_root = tk.Tk()
             if account == "Usuario":
                 account = False
             else:
                 account = True
                 
             # DAR INICIO A LA VENTANA PRINCIPAL
-
+            Gomeria(gomeria_root, username, account)
+            gomeria_root.mainloop()
 
 
             
